@@ -30,9 +30,13 @@ axios.interceptors.response.use(response => {
   }
   const originalRequest = error.config
   var response = {}
+  /**
+  * This is haneling expired refresh token
+  */
   if (error.response.status === 401 && message.code !== 'MSAAUT3037') {
-    store.dispatch('clearAccount')
-    router.push({ path: '/login' })
+    /**
+    * Redirect your client to login page here
+    */
     return Promise.reject(error)
   }
   if (error.response.status === 401 && message.code === 'MSAAUT3037') {
