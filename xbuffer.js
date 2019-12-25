@@ -3,7 +3,7 @@
 import axios from 'axios'
 
 // Your base account
-axios.defaults.baseURL = 'https://api02.xbuffer.net/v1/client/user/project'
+axios.defaults.baseURL = 'https://api.xbuffer.net/v1/client/user/project'
 
 // Make sure that we are getting the right data type
 const isJson = (json) => {
