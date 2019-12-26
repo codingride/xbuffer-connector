@@ -1,4 +1,4 @@
-import Xbuffer from './xbuffer'
+import Xbuffer from './xbuffer';
 
 /**
 * Prepare data to be used in your auth request
@@ -22,9 +22,9 @@ Xbuffer(data, result => {
     * token, refresh and account (user uuid) returning back after successful login
     * You may store results in sessionStorage or localStorage to be resued for further requests
     */
-    sessionStorage.setItem('XbToken', result.data.token)
-    sessionStorage.setItem('XbRefresh', result.data.refresh)
-    sessionStorage.setItem('XbUser', result.data.account)
+    sessionStorage.setItem('XbToken', result.data.token);
+    sessionStorage.setItem('XbRefresh', result.data.refresh);
+    sessionStorage.setItem('XbUser', result.data.account);
     /**
     * Redirect after successful login
     */
