@@ -22,9 +22,9 @@ Xbuffer(data, result => {
     * token, refresh and account (user uuid) returning back after successful login
     * You may store results in sessionStorage or localStorage to be resued for further requests
     */
-    sessionStorage.setItem('XbToken', result.data.token);
-    sessionStorage.setItem('XbRefresh', result.data.refresh);
-    sessionStorage.setItem('XbUser', result.data.account);
+    localStorage.setItem('XbToken', result.data.token);
+    localStorage.setItem('XbRefresh', result.data.refresh);
+    localStorage.setItem('XbUser', result.data.account);
     /**
     * Redirect after successful login
     */
