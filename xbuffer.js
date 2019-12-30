@@ -44,7 +44,7 @@ axios.interceptors.response.use(response => {
     return axios.post(`${store.state.login.user}/refresh`, null, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${sessionStorage.getItem('XbRefresh')}`
+        'Authorization': `Bearer ${localStorage.getItem('XbRefresh')}`
       }
     }).then(result => {
       if (isJson(result.data.data)) {
@@ -73,7 +73,7 @@ const Xbuffer = (params, callback) => {
     'Content-Type': 'application/json';
   }
   if (params.headers) {
-    headers['Authorization'] = `Bearer ${sessionStorage.getItem('XbToken')}`;
+    headers['Authorization'] = `Bearer ${localStorage.getItem('XbToken')}`;
   }
   let sendRequest = {
     headers: headers,
