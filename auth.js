@@ -8,7 +8,7 @@ let data = {
     email: '', // The email that is coming from the login form
     password: '' // The password that is coming from the login form
   },
-  path: 'auth',
+  path: 'auth', // You may change this to 'signup' in case adding a signup page
   method: 'post',
   headears: false // Headers are important for requests after logging in
 }
