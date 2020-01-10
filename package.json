@@ -1,0 +1,20 @@
+{
+  "name": "xbuffer-connector",
+  "version": "0.1.1",
+  "description": "Xbuffer Connector",
+  "repository": {
+    "url": "https://github.com/codingride/xbuffer-connector.git"
+  },
+  "main": "index.js",
+  "keywords": [
+    "Xbuffer",
+    "JWT",
+    "Auth",
+    "Connect"
+  ],
+  "author": "Abdullah Alghamdi",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.1"
+  }
+}
