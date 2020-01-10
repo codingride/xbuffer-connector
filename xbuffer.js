@@ -1,9 +1,8 @@
-
 // Using axios as http request handler
 import axios from 'axios';
 
 // Your base account path
-axios.defaults.baseURL = 'https://api.xbuffer.net/v1/client/<user>/<project>';
+axios.defaults.baseURL = 'https://api.xbuffer.net/v1/client/';
 
 // Make sure that we are getting the right data type
 const isJson = (json) => {
@@ -61,16 +60,18 @@ axios.interceptors.response.use(response => {
     })
   }
   return Promise.reject(error);
-})
+});
 
 /**
 * you can either store data in sessionStorage or localStorage
+* @param {object}, { path: '<user>/<project>/<command>/?query', method: 'get|post|put|delete', headers: true|false }
+* @returns {callback} 
 */
 const Xbuffer = (params, callback) => {
   let path = params.path || '';
   let method = params.method || 'get';
   let headers = {
-    'Content-Type': 'application/json';
+    'Content-Type': 'application/json'
   }
   if (params.headers) {
     headers['Authorization'] = `Bearer ${localStorage.getItem('XbToken')}`;
@@ -90,7 +91,7 @@ const Xbuffer = (params, callback) => {
       let response = {}
       if (result.data) {
         response = {
-          result: true;
+          result: true
         }
         if (typeof result.data.data === 'string') {
           if (isJson(result.data.data)) {
@@ -113,7 +114,7 @@ const Xbuffer = (params, callback) => {
       let response = {}
       if (error.response) {
         response = {
-          result: false;
+          result: false
         }
         if (typeof error.response.data.message === 'string') {
           if (isJson(error.response.data.message)) {
@@ -131,7 +132,7 @@ const Xbuffer = (params, callback) => {
         }
       }
       callback(response);
-    })
+    });
 }
 
 export default Xbuffer;
