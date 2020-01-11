@@ -1,19 +1,16 @@
-// Using axios as http request handler
-import axios from 'axios';
+'use strict';
 
+// Helpers
+const helpers = require('./helpers.js');
+
+// Using axios as an http request handler
+const axios = require('axios');
+
+// Constructs needed
 // Your base account path
 axios.defaults.baseURL = 'https://api.xbuffer.net/v1/client/';
-
-// Make sure that we are getting the right data type
-const isJson = (json) => {
-  var str = json.toString();
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return false;
-  }
-  return true;
-}
+if (this.config.path) axios.defaults.baseURL += this.config.path;
+if (this.config.request) axios.defaults.baseURL += this.config.request;
 
 /**
 * This is the refresh token interceptor in case your JWT is expired
@@ -22,7 +19,7 @@ axios.interceptors.response.use(response => {
   return response;
 }, error => {
   var message = {}
-  if (isJson(error.response.data.message)) {
+  if (helpers.json(error.response.data.message)) {
     message = JSON.parse(error.response.data.message);
   } else {
     message = error.response.data.message;
@@ -40,13 +37,13 @@ axios.interceptors.response.use(response => {
   }
   if (error.response.status === 401 && message.code === 'MSAAUT3037') {
     // originalRequest._retry = true;
-    return axios.post(`${store.state.login.user}/refresh`, null, {
+    return axios.post('refresh', null, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('XbRefresh')}`
+        'Authorization': `Bearer ${helpers.storage.getItem(this.config.refresh)}`
       }
     }).then(result => {
-      if (isJson(result.data.data)) {
+      if (helpers.json(result.data.data)) {
         response = JSON.parse(result.data.data);
       } else {
         response = result.data.data;
@@ -62,19 +59,24 @@ axios.interceptors.response.use(response => {
   return Promise.reject(error);
 });
 
-/**
-* you can either store data in sessionStorage or localStorage
-* @param {object}, { path: '<user>/<project>/<command>/?query', method: 'get|post|put|delete', headers: true|false }
-* @returns {callback} 
-*/
-const Xbuffer = (params, callback) => {
+module.exports.config = {
+  path: null,
+  request: null,
+  method: 'get',
+  storage: 'session',
+  token: 'XbToken',
+  refresh: 'XbRefresh',
+  user: 'XbUser'
+}
+
+module.exports.xbuffer = () => {
   let path = params.path || '';
   let method = params.method || 'get';
   let headers = {
     'Content-Type': 'application/json'
   }
   if (params.headers) {
-    headers['Authorization'] = `Bearer ${localStorage.getItem('XbToken')}`;
+    headers['Authorization'] = `Bearer ${helpers.storage.getItem(this.config.token)}`;
   }
   let sendRequest = {
     headers: headers,
@@ -86,7 +88,8 @@ const Xbuffer = (params, callback) => {
   } else {
     sendRequest.data = params.data;
   }
-  axios(sendRequest)
+  return new Promise((resolve, reject) => {
+    axios(sendRequest)
     .then(result => {
       let response = {}
       if (result.data) {
@@ -108,7 +111,7 @@ const Xbuffer = (params, callback) => {
           data: null
         }
       }
-      callback(response);
+      resolve(response);
     })
     .catch(error => {
       let response = {}
@@ -131,8 +134,7 @@ const Xbuffer = (params, callback) => {
           data: 'Connection Error!'
         }
       }
-      callback(response);
+      reject(response);
     });
+  });
 }
-
-export default Xbuffer;
