@@ -1,4 +1,4 @@
-import Xbuffer from './xbuffer';
+import Xbuffer from 'xbuffer-connector';
 
 /**
 * Prepare data to be used in your auth request
