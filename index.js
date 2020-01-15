@@ -11,6 +11,7 @@ const axios = require('axios');
 axios.defaults.baseURL = 'https://api.xbuffer.net/v1/client/';
 if (this.config.path) axios.defaults.baseURL += this.config.path;
 if (this.config.request) axios.defaults.baseURL += this.config.request;
+let storage = helpers.storage(this.config.storage);
 
 /**
 * This is the refresh token interceptor in case your JWT is expired
@@ -40,7 +41,7 @@ axios.interceptors.response.use(response => {
     return axios.post('refresh', null, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${helpers.storage.getItem(this.config.refresh)}`
+        'Authorization': `Bearer ${storage.getItem(this.config.refresh)}`
       }
     }).then(result => {
       if (helpers.json(result.data.data)) {
@@ -49,7 +50,7 @@ axios.interceptors.response.use(response => {
         response = result.data.data;
       }
       // Store the new retrieved token
-      sessionStorage.setItem('XbToken', response.token);
+      storage.setItem('XbToken', response.token);
       originalRequest.headers['Authorization'] = `Bearer ${response.token}`;
       return axios(originalRequest);
     }).catch(error => {
@@ -76,7 +77,7 @@ module.exports.xbuffer = () => {
     'Content-Type': 'application/json'
   }
   if (params.headers) {
-    headers['Authorization'] = `Bearer ${helpers.storage.getItem(this.config.token)}`;
+    headers['Authorization'] = `Bearer ${storage.getItem(this.config.token)}`;
   }
   let sendRequest = {
     headers: headers,
