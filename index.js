@@ -70,7 +70,7 @@ module.exports.config = {
   user: 'XbUser'
 }
 
-module.exports.xbuffer = () => {
+module.exports.connect = () => {
   let path = params.path || '';
   let method = params.method || 'get';
   let headers = {
