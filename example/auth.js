@@ -1,6 +1,19 @@
 import Xbuffer from 'xbuffer-connector';
 
 /**
+* Add your configurations before start using it
+*/
+Xbuffer.config = {
+  path: 'auth',
+  request: 'login',
+  method: 'post',
+  storage: 'local',
+  token: 'XbToken',
+  refresh: 'XbRefresh',
+  user: 'XbUser'
+}
+
+/**
 * Prepare data to be used in your auth request
 */
 let data = {
@@ -16,7 +29,7 @@ let data = {
 /**
 * Using axios imported from xbuffer file
 */
-Xbuffer(data, result => {
+Xbuffer.connect(data, result => {
   if (result.result && result.data.token) {
     /**
     * token, refresh and account (user uuid) returning back after successful login
