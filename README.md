@@ -1,6 +1,11 @@
 # xbuffer-connector
 Connecting to Xbuffer API services
 
+## Installation
+```ssh
+npm i xbuffer-connector
+```
+
 ## Required Pre Settings
 Create a global variable of type object that can be accessed from anywhere in your application.
 The var name must be named "xbuffer".
@@ -49,3 +54,6 @@ Xbuffer.connect(paramsToPass, response => {
   }
 });
 ```
+
+## Example
+[Authentication](https://github.com/codingride/xbuffer-connector/blob/master/example/auth.js)
