@@ -6,12 +6,14 @@ const helpers = require('./helpers.js');
 // Using axios as an http request handler
 const axios = require('axios');
 
+// Make sure global config variable is set
+const xb = window.xbuffer;
+const defaults = helpers.defaults(xb);
+
 // Constructs needed
 // Your base account path
-axios.defaults.baseURL = 'https://api.xbuffer.net/v1/client/';
-if (this.config.path) axios.defaults.baseURL += this.config.path;
-if (this.config.request) axios.defaults.baseURL += this.config.request;
-let storage = helpers.storage(this.config.storage);
+axios.defaults.baseURL = `${defaults.path}/v1/client/${defaults.user}/${defaults.project}`;
+let storage = helpers.storage(defaults.storage.type);
 
 /**
 * This is the refresh token interceptor in case your JWT is expired
@@ -41,7 +43,7 @@ axios.interceptors.response.use(response => {
     return axios.post('refresh', null, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${storage.getItem(this.config.refresh)}`
+        'Authorization': `Bearer ${storage.getItem(defaults.storage.refresh)}`
       }
     }).then(result => {
       if (helpers.json(result.data.data)) {
@@ -60,24 +62,25 @@ axios.interceptors.response.use(response => {
   return Promise.reject(error);
 });
 
-module.exports.config = {
-  path: null,
-  request: null,
-  method: 'get',
-  storage: 'session',
-  token: 'XbToken',
-  refresh: 'XbRefresh',
-  user: 'XbUser'
-}
+module.exports.connect = (params, callback) => {
+  let response = {}
+  // If not alll required params available
+  // Desmiss with error
+  if(defaults.error) {
+    response = {
+      result: false,
+      data: 'Missing Config Data!'
+    }
+    return callback(response);
+  }
 
-module.exports.connect = () => {
   let path = params.path || '';
   let method = params.method || 'get';
   let headers = {
     'Content-Type': 'application/json'
   }
   if (params.headers) {
-    headers['Authorization'] = `Bearer ${storage.getItem(this.config.token)}`;
+    headers['Authorization'] = `Bearer ${storage.getItem(defaults.storage.token)}`;
   }
   let sendRequest = {
     headers: headers,
@@ -86,56 +89,67 @@ module.exports.connect = () => {
   }
   if (method === 'get' || method === 'delete') {
     sendRequest.params = params.data;
+    sendRequest.params.appid = defaults.appid;
   } else {
     sendRequest.data = params.data;
+    sendRequest.data.appid = defaults.appid;
   }
-  return new Promise((resolve, reject) => {
-    axios(sendRequest)
-    .then(result => {
-      let response = {}
-      if (result.data) {
-        response = {
-          result: true
-        }
-        if (typeof result.data.data === 'string') {
-          if (isJson(result.data.data)) {
-            response.data = JSON.parse(result.data.data);
-          } else {
-            response.data = result.data.data;
-          }
-        } else if (typeof result.data.data === 'object') {
+  sendRequest.onUploadProgress = function (progressEvent) {
+    return Math.round((progressEvent.loaded / progressEvent.total) * 100)
+  }
+  axios(sendRequest)
+  .then(result => {
+    if (result.data) {
+      response = {
+        result: true
+      }
+      if (typeof result.data.data === 'string') {
+        if (helpers.json(result.data.data)) {
+          response.data = JSON.parse(result.data.data);
+        } else {
           response.data = result.data.data;
         }
-      } else {
-        response = {
-          result: false,
-          data: null
-        }
+      } else if (typeof result.data.data === 'object') {
+        response.data = result.data.data;
       }
-      resolve(response);
-    })
-    .catch(error => {
-      let response = {}
-      if (error.response) {
-        response = {
-          result: false
-        }
-        if (typeof error.response.data.message === 'string') {
-          if (isJson(error.response.data.message)) {
-            response.data = JSON.parse(error.response.data.message);
-          } else {
-            response.data = error.response.data.message;
-          }
-        } else if (typeof error.response.data.message === 'object') {
+    } else {
+      response = {
+        result: false,
+        data: null
+      }
+    }
+    return callback(response);
+  })
+  .catch(error => {
+    let response = {}
+    if (error.response) {
+      response = {
+        result: false
+      }
+      if (typeof error.response.data.message === 'string') {
+        if (helpers.json(error.response.data.message)) {
+          response.data = JSON.parse(error.response.data.message);
+        } else {
           response.data = error.response.data.message;
         }
-      } else if (error.request) {
-        response = {
-          result: false,
-          data: 'Connection Error!'
-        }
+      } else if (typeof error.response.data.message === 'object') {
+        response.data = error.response.data.message;
       }
-      reject(response);
-    });
+    } else if (error.request) {
+      response = {
+        result: false,
+        data: 'Connection Error!'
+      }
+    }
+    return callback(response);
   });
+}
+
+module.exports.media = (file, size) => {
+  size = `&size=${size}` || ''
+  if (file) {
+    return `${defaults.path}/v1/client/${defaults.user}/${defaults.project}/?appid=${defaults.appid}&type=media${size}&request=${file}`;
+  } else {
+    return 'https://via.placeholder.com/368x368?text=No+Image+Was+Found';
+  }
 }
