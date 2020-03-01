@@ -1,6 +1,6 @@
 {
   "name": "xbuffer-connector",
-  "version": "0.2.0",
+  "version": "0.5.1",
   "description": "Xbuffer Connector",
   "repository": {
     "url": "https://github.com/codingride/xbuffer-connector.git"
@@ -15,6 +15,6 @@
   "author": "Abdullah Alghamdi",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.1"
+    "axios": "^0.19.2"
   }
 }
