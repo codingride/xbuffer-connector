@@ -9,6 +9,7 @@ npm i xbuffer-connector
 ## Required Pre Settings
 Create a global variable of type object that can be accessed from anywhere in your application.
 The var name must be named "xbuffer".
+For example, if you're using VueJS or ReactJS, you need to assign the global variable in the "index.html" file inside the project's "public" folder.
 ```JavaScript
 var window.xbuffer = {
   path: 'https://api.xbuffer.net', // This is the default value. You can change the path name if you are given a different one.
