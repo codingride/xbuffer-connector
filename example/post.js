@@ -7,7 +7,7 @@ var getRequest = {
   method: 'post',
   headers: true, // Set true if write to database is restricted
   data: {
-    { "key" : "value" }, // This must be a key:value json object
+    data: "{\"key\":\"value\"}", // This must be a key:value json object
     type: 'data',
     request: 'collection_name', // Collection name in the database
   }
