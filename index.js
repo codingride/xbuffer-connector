@@ -32,13 +32,13 @@ axios.interceptors.response.use(response => {
   /**
   * This is haneling expired refresh token
   */
-  if (error.response.status === 401 && message.code !== 'MSAAUT3037') {
+  if (error.response.status === 401 && message.code !== 'MSCIND3037') {
     /**
     * Redirect your client to login page here
     */
     return Promise.reject(error);
   }
-  if (error.response.status === 401 && message.code === 'MSAAUT3037') {
+  if (error.response.status === 401 && message.code === 'MSCIND3037') {
     // originalRequest._retry = true;
     return axios.post('refresh', null, {
       headers: {
