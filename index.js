@@ -40,7 +40,7 @@ axios.interceptors.response.use(response => {
   }
   if (error.response.status === 401 && message.code === 'MSCIND3037') {
     // originalRequest._retry = true;
-    return axios.post('refresh', null, {
+    return axios.post('refresh', originalRequest.data, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${storage.getItem(defaults.storage.refresh)}`
