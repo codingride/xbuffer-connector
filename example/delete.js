@@ -5,9 +5,11 @@
 var getRequest = {
   path: '',
   method: 'post',
-  type: 'data',
-  request: 'collection_name', // Collection name in the database
-  id: 'id01....', // This must to be provided to know what document needs to be deleted
+  data: {
+    type: 'data',
+    request: 'collection_name', // Collection name in the database
+    id: 'id01....', // This must to be provided to know what document needs to be deleted
+  }
 }
 
 /**
@@ -20,10 +22,12 @@ var getRequest = {
 var getRequest = {
   path: '',
   method: 'delete',
-  type: 'data',
-  id: 'id01....', // This must to be provided to know what document needs to be changed
-  request: 'collection_name', // Collection name in the database
-  record: 'key_name', // Add the targted destnation where you want to delete from.
+  data: {
+    type: 'data',
+    id: 'id01....', // This must to be provided to know what document needs to be changed
+    request: 'collection_name', // Collection name in the database
+    record: 'key_name', // Add the targted destnation where you want to delete from.
+  }
 }
 
 /**
