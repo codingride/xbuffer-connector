@@ -5,9 +5,12 @@
 var getRequest = {
   path: '',
   method: 'post',
-  type: 'data',
-  request: 'collection_name', // Collection name in the database
-  data: { "key" : "value" } // This must be a key:value json object
+  headers: true, // Set true if write to database is restricted
+  data: {
+    { "key" : "value" }, // This must be a key:value json object
+    type: 'data',
+    request: 'collection_name', // Collection name in the database
+  }
 }
 
 /**
@@ -20,11 +23,14 @@ var getRequest = {
 var getRequest = {
   path: '',
   method: 'post',
-  type: 'data',
-  id: 'id01....', // This must to be provided to know what document needs to be changed
-  request: 'collection_name', // Collection name in the database
-  record: 'key_name', // Add the targted destnation where you want to add the new data.
-  data: "new data" // It could be another object like { "new_key":"new_val" }
+  headers: true, // Set true if write to database is restricted
+  data: {
+    type: 'data',
+    id: 'id01....', // This must to be provided to know what document needs to be changed
+    request: 'collection_name', // Collection name in the database
+    record: 'key_name', // Add the targted destnation where you want to add the new data.
+    data: "new data" // It could be another object like { "new_key":"new_val" }
+  }
 }
 
 /**
