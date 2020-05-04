@@ -1,19 +1,6 @@
 import Xbuffer from 'xbuffer-connector';
 
 /**
-* Add your configurations before start using it
-*/
-Xbuffer.config = {
-  path: 'auth',
-  request: 'login',
-  method: 'post',
-  storage: 'local',
-  token: 'XbToken',
-  refresh: 'XbRefresh',
-  user: 'XbUser'
-}
-
-/**
 * Prepare data to be used in your auth request
 */
 let data = {
