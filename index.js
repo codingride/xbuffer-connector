@@ -83,6 +83,9 @@ module.exports.connect = (params, callback) => {
   if (params.headers) {
     headers['Authorization'] = `Bearer ${storage.getItem(defaults.storage.token)}`;
   }
+  if (params.captcha) {
+    headers['x-xbuffer-recaptcha'] = params.captcha;
+  }
   let sendRequest = {
     headers: headers,
     url: path,
