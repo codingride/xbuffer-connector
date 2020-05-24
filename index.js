@@ -40,12 +40,13 @@ axios.interceptors.response.use(response => {
   }
   if (error.response.status === 401 && message.code === 'MSCIND3037') {
     // originalRequest._retry = true;
-    const backData = originalRequest.data ? originalRequest.data : originalRequest.params;
+    const backData = originalRequest.data instanceof FormData ?  { appid: originalRequest.data.get('appid') } : originalRequest.data ? originalRequest.data : originalRequest.params;
+    const head = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${storage.getItem(defaults.storage.refresh)}`
+    }
     return axios.post('refresh', backData, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${storage.getItem(defaults.storage.refresh)}`
-      }
+      headers: head
     }).then(result => {
       if (helpers.json(result.data.data)) {
         response = JSON.parse(result.data.data);
@@ -86,6 +87,9 @@ module.exports.connect = (params, callback) => {
   if (params.captcha) {
     headers['x-xbuffer-recaptcha'] = params.captcha;
   }
+  if (params.type) {
+    headers['Content-Type'] = params.type;
+  }
   let sendRequest = {
     headers: headers,
     url: path,
@@ -96,10 +100,11 @@ module.exports.connect = (params, callback) => {
     sendRequest.params.appid = defaults.appid;
   } else {
     sendRequest.data = params.data;
-    sendRequest.data.appid = defaults.appid;
-  }
-  sendRequest.onUploadProgress = function (progressEvent) {
-    return Math.round((progressEvent.loaded / progressEvent.total) * 100)
+    if(params.type === 'multipart/form-data') {
+      sendRequest.data.append('appid', defaults.appid)
+    } else {
+      sendRequest.data.appid = defaults.appid;
+    }
   }
   axios(sendRequest)
   .then(result => {
