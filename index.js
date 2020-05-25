@@ -95,7 +95,7 @@ module.exports.connect = (params, callback) => {
     url: path,
     method: method
   }
-  if (method === 'get' || method === 'delete') {
+  if (method === 'get') {
     sendRequest.params = params.data;
     sendRequest.params.appid = defaults.appid;
   } else {
