@@ -155,7 +155,11 @@ module.exports.connect = (params, callback) => {
 }
 
 module.exports.media = (file, size) => {
-  size ? `&size=${size}` : ''
+  if(size) {
+    size = `&size=${size}`;
+  } else {
+    size = ''
+  }
   if (file) {
     return `${defaults.path}/v1/client/${defaults.user}/${defaults.project}/?appid=${defaults.appid}&type=media${size}&request=${file}`;
   } else {
