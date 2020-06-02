@@ -25,6 +25,7 @@ Xbuffer.connect(data, result => {
     localStorage.setItem('XbToken', result.data.token);
     localStorage.setItem('XbRefresh', result.data.refresh);
     localStorage.setItem('XbUser', result.data.account);
+    localStorage.setItem('XbEmail', result.data.email);
     /**
     * Redirect after successful login
     */
