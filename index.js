@@ -54,7 +54,7 @@ axios.interceptors.response.use(response => {
         response = result.data.data;
       }
       // Store the new retrieved token
-      storage.setItem('XbToken', response.token);
+      storage.setItem(defaults.storage.token, response.token);
       originalRequest.headers['Authorization'] = `Bearer ${response.token}`;
       return axios(originalRequest);
     }).catch(error => {
