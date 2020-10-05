@@ -106,6 +106,9 @@ module.exports.connect = (params, callback) => {
       sendRequest.data.appid = defaults.appid;
     }
   }
+  if (params.response) {
+    sendRequest.responseType = params.response;
+  }
   axios(sendRequest)
   .then(result => {
     if (result.data) {
