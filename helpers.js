@@ -32,7 +32,7 @@ module.exports.defaults = (params) => {
 }
 
 module.exports.json = (json) => {
-  var str = json.toString();
+  let str = json.toString();
   try {
     JSON.parse(str);
   } catch (e) {
